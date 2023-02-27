@@ -103,7 +103,8 @@
               </ng-container>
               <ng-container addBtn>
                 <div class="course-card-data-summary-points d-flex flex-column align-self-end">
-                  <button class="btn add-to-cart-btn d-flex align-items-center justify-content-center" [disabled]="!listItem.AvailableSeats||!((listItem.CourseId|isCourseAvaiable:myCourses$)|async)" (click)="addToCart(listItem)">Add
+                  <!-- ||!((listItem.CourseId|isCourseAvaiable:myCourses$)|async) -->
+                  <button class="btn add-to-cart-btn d-flex align-items-center justify-content-center" [disabled]="!listItem.AvailableSeats" (click)="addToCart(listItem)">Add
                     to cart</button>
                 </div>
               </ng-container>

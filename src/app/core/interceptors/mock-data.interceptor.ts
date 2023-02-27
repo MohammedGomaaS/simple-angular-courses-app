@@ -1,4 +1,3 @@
-import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import {
   HttpRequest,
@@ -8,7 +7,8 @@ import {
   HttpResponse,
   HttpParams
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 const mockFolder: string = `assets/mock-data`;
 
 @Injectable()
@@ -18,6 +18,11 @@ export class MockDataInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    if(request.method ==='POST' || request.method ==='PATCH'){
+      return next.handle(request).pipe(catchError(err=>{
+        return of(new HttpResponse({ body: request.body }));
+      }));
+    }
     const fakeUrl = `${mockFolder}${request.url}.json`;
     const fakeRequest = request.clone({ url: fakeUrl });
     return next.handle(fakeRequest).pipe(map((event: HttpEvent<any>) => {

@@ -6,7 +6,7 @@ import { Subscription, Observable, of } from 'rxjs';
 import { Course } from 'src/app/application/shared/models';
 import { ActivatedRoute } from '@angular/router';
 import { QueryParamsHelperService } from 'src/app/core/services';
-import { map, tap } from 'rxjs/operators';
+import { map, take, tap } from 'rxjs/operators';
 import { FormBuilder, FormGroup } from '@angular/forms';
 @Component({
   templateUrl: './all-courses.component.html',
@@ -38,7 +38,7 @@ export class AllCoursesComponent implements OnInit, OnDestroy {
   }
 
   private setMyCourses():void{
-    this.coursesService.getStudentCourses(1234).subscribe(courses$=>{
+    this.coursesService.getStudentCourses(1234).pipe(take(1)).subscribe(courses$=>{
       this.myCourses$ = courses$;
     });
   }
@@ -58,11 +58,11 @@ export class AllCoursesComponent implements OnInit, OnDestroy {
       courseDurationLimit: [Number(this.filterParams.courseDurationLimit)],
       category: [this.filterParams.category]
     });
-    this.searchForm.valueChanges.subscribe(re => {
+    this.subscriptions.push(this.searchForm.valueChanges.subscribe(re => {
       this.filterParams = re;
       // we depend on filteration change cretira to the route query params so we can refresh and don't lose the filter
       this.queryParamsHelperService.changeUrlParams(this.filterParams)
-    })
+    }));
   }
 
 
@@ -122,8 +122,9 @@ export class AllCoursesComponent implements OnInit, OnDestroy {
   }
 
   public addToCart(course: Course): void {
-    this.myCourses$.push(of(course))
-    this.myCourses$ = [...this.myCourses$];
+    this.coursesService.addCourse(course).pipe(take(1)).subscribe(res=>{
+      this.myCourses$.push(of(course))
+    })
   }
 
   ngOnDestroy():void {

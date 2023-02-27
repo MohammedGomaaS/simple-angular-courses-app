@@ -31,12 +31,12 @@ export class CoursesService {
     return this.http.get<Course[]>('/courses',{params: {CourseId: `${courseId}`}}).pipe(map(courses => courses[0]));
   }
 
-  private addCourse(course: Course) {
-
+  public addCourse(course: Course) {
+    return this.http.post<Course>('/courses',course);
   }
 
-  private editCourseSeats(courseId: number, availableSeats: number) {
-
+  public editCourseSeats(courseId: number, availableSeats: number) {
+    return this.http.patch<Course>('/courses',{courseId,availableSeats});
   }
 
 }
