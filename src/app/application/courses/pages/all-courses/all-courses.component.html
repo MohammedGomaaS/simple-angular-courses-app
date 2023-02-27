@@ -58,11 +58,11 @@
 
     </div>
     <!--End Filters-->
-    <div class="my-courses-wrapper" *ngIf="(myCourses$|async) as myCourses">
+    <div class="my-courses-wrapper" *ngIf="myCourses$.length>0">
       <h4 class="my-courses-title">My Courses</h4>
     <div class="courses">
       <perfect-scrollbar style="height: 250px;">
-      <div class="course d-flex align-items-center" *ngFor="let course$ of myCourses">
+      <div class="course d-flex align-items-center" *ngFor="let course$ of myCourses$">
         <ng-container *ngIf="(course$|async) as course">
         <img class="course-image" [src]="course.CourseImg" alt="course image">
         <label class="course-name">{{course.CourseName}}</label>
@@ -103,7 +103,7 @@
               </ng-container>
               <ng-container addBtn>
                 <div class="course-card-data-summary-points d-flex flex-column align-self-end">
-                  <button class="btn add-to-cart-btn d-flex align-items-center justify-content-center">Add
+                  <button class="btn add-to-cart-btn d-flex align-items-center justify-content-center" [disabled]="!listItem.AvailableSeats||!((listItem.CourseId|isCourseAvaiable:myCourses$)|async)" (click)="addToCart(listItem)">Add
                     to cart</button>
                 </div>
               </ng-container>

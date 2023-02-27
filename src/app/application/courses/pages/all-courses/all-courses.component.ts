@@ -1,8 +1,8 @@
 import { CoursesService } from './../../../shared/services';
-import { CourseCategory, CourseLevel } from './../../../shared/models/course';
+import { CourseCategory } from './../../../shared/models/course';
 import { CourseDurationLimit, CoursesFilterParams } from './../../models';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription, Observable, of } from 'rxjs';
 import { Course } from 'src/app/application/shared/models';
 import { ActivatedRoute } from '@angular/router';
 import { QueryParamsHelperService } from 'src/app/core/services';
@@ -15,7 +15,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class AllCoursesComponent implements OnInit, OnDestroy {
   public searchForm: FormGroup;
   public componentList: Course[] = [];
-  public myCourses$: Observable<Observable<Course>[]>;
+  public myCourses$: Observable<Course>[] = [];
   private courses: Course[] = [];
   private subscriptions: Subscription[] = [];
   private searchSubscription: Subscription;
@@ -37,21 +37,23 @@ export class AllCoursesComponent implements OnInit, OnDestroy {
     this.setMyCourses();
   }
 
-  private setMyCourses(){
-    this.myCourses$ = this.coursesService.getStudentCourses(1234);
+  private setMyCourses():void{
+    this.coursesService.getStudentCourses(1234).subscribe(courses$=>{
+      this.myCourses$ = courses$;
+    });
   }
 
-  public toggleFilters() {
+  public toggleFilters():void {
     this.isFiltersWrapperActive = !this.isFiltersWrapperActive;
     document.getElementById('overlay').classList.remove('d-none');
   };
 
-  public closeFilters() {
+  public closeFilters():void {
     this.isFiltersWrapperActive = false;
     document.getElementById('overlay').classList.add('d-none');
   }
 
-  private createSearchForm() {
+  private createSearchForm():void {
     this.searchForm = this.fb.group({
       courseDurationLimit: [Number(this.filterParams.courseDurationLimit)],
       category: [this.filterParams.category]
@@ -63,10 +65,8 @@ export class AllCoursesComponent implements OnInit, OnDestroy {
     })
   }
 
-  /**
-   * this function listen to query param subject to filter the items
-   */
-  private subscribeToUrlParams() {
+
+  private subscribeToUrlParams():void {
     this.subscriptions.push(
       this.route.queryParams.subscribe(params => {
         Object.assign(this.filterParams, params);
@@ -75,7 +75,7 @@ export class AllCoursesComponent implements OnInit, OnDestroy {
     );
   }
 
-  private setComponentList() {
+  private setComponentList():void {
     this.searchSubscription?.unsubscribe();
     if (this.courses?.length > 0) {
       this.componentList = this.filterCourses(this.courses);
@@ -94,7 +94,7 @@ export class AllCoursesComponent implements OnInit, OnDestroy {
  * @param courses
  * @returns
  */
-  private filterCourses(courses: Course[]) {
+  private filterCourses(courses: Course[]):Course[] {
     return courses.filter(course => {
       let existed: boolean = true
       if (this.filterParams.category) {
@@ -120,7 +120,13 @@ export class AllCoursesComponent implements OnInit, OnDestroy {
       return existed;
     })
   }
-  ngOnDestroy() {
+
+  public addToCart(course: Course): void {
+    this.myCourses$.push(of(course))
+    this.myCourses$ = [...this.myCourses$];
+  }
+
+  ngOnDestroy():void {
     this.subscriptions.forEach(s => s && s.unsubscribe());
     this.searchSubscription?.unsubscribe();
   }

@@ -1,4 +1,4 @@
-import { AllCoursesComponent } from './pages';
+import { AllCoursesComponent, IsCourseAvaiablePipe } from './pages';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -8,7 +8,7 @@ import { SharedModule } from '../shared/shared.module';
 
 const components = [];
 const directives = [];
-const pipes = [];
+const pipes = [IsCourseAvaiablePipe];
 const services = [];
 const pages = [AllCoursesComponent];
 
