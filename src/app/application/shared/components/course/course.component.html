@@ -1,0 +1,47 @@
+<div class="course-card">
+  <img [src]="course.CourseImg" alt="">
+  <div class="course-card-data">
+    <p class="course-card-data-description">{{course.CourseName}}</p>
+    <div class="d-flex justify-content-between">
+      <div class="course-card-data-summary-points d-flex flex-column justify-content-between">
+        <p class="course-card-data-summary-point-text">{{course.courseLevel}}</p>
+        <p class="course-card-data-summary-point-text">Duration : {{course.CourseDuration}} H</p>
+      </div>
+      <div class="course-card-data-summary-points d-flex flex-column justify-content-between">
+        <ng-content select="[availableSeats]"></ng-content>
+      <ng-content select="[paymentMethods]"></ng-content>
+        <div class="course-card-data-summary-point-text">
+          <span>${{course.CoursePrice}}</span>
+        </div>
+      </div>
+      <ng-content select="[addBtn]"></ng-content>
+    </div>
+  </div>
+</div>
+<div class="col-12 col-md-6" *ngIf="false">
+  <div class="course-card">
+    <img [src]="course.CourseImg" alt="loading...">
+    <div class="course-card-data">
+      <p class="course-card-data-description">{{course.CourseName}}</p>
+      <div class="d-flex justify-content-between">
+        <div class="course-card-data-summary-points d-flex flex-column justify-content-between">
+          <p class="course-card-data-summary-point-text">Expert</p>
+          <p class="course-card-data-summary-point-text">Duration : 10 H</p>
+        </div>
+        <div class="course-card-data-summary-points d-flex flex-column justify-content-between">
+          <div class="course-card-data-summary-point-text">
+            <i class="fa fa-users orange-color"></i>
+            <span>3</span>
+          </div>
+          <p class="course-card-data-summary-point-text">Duration : 10 H</p>
+        </div>
+        <div class="course-card-data-summary-points d-flex flex-column align-self-end">
+          <button class="btn add-to-cart-btn d-flex align-items-center justify-content-center">Add
+            to cart</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+

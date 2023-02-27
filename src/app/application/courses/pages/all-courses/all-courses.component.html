@@ -1,0 +1,118 @@
+<!--Start Page Content-->
+<div class="page-content d-flex justify-content-between row no-gutters" [formGroup]="searchForm">
+
+  <div class="col-xl">
+    <!--Start Filters-->
+    <div id="filters-wrapper" class="filters-wrapper" [ngClass]="{active:isFiltersWrapperActive}">
+      <div class="filters-title-wrapper d-flex justify-content-between">
+        <h4 class="filters-title">Filter BY:</h4>
+        <button id="closeFiltersBtn" class="btn close-btn" (click)="closeFilters()">
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+      <div class="filters-group">
+        <h5 class="filters-group-title">Course Duration</h5>
+        <div>
+          <div class="custom-control custom-checkbox">
+            <input class="custom-control-input" type="radio" id="lessThan2Hours" formControlName="courseDurationLimit"
+              [value]="CourseDurationLimitEnum.lessThan2Hours" name="courseDurationLimit">
+            <label class="custom-control-label" for="lessThan2Hours">Less than 2 hours</label>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input class="custom-control-input" type="radio" id="from2To10Hours" formControlName="courseDurationLimit"
+              [value]="CourseDurationLimitEnum.from2To10Hours" name="courseDurationLimit">
+            <label class="custom-control-label" for="from2To10Hours">From 2 to 10 hours</label>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input class="custom-control-input" type="radio" id="morThan10Hours" formControlName="courseDurationLimit"
+              [value]="CourseDurationLimitEnum.morThan10Hours" name="courseDurationLimit">
+            <label class="custom-control-label" for="morThan10Hours">more than 10 hours</label>
+          </div>
+        </div>
+      </div>
+      <div class="filters-group">
+        <h5 class="filters-group-title">All Categories</h5>
+        <div>
+          <div class="custom-control custom-checkbox">
+            <input class="custom-control-input" type="radio" id="development" formControlName="category"
+              [value]="courseCategoryEnum.Development" name="category">
+            <label class="custom-control-label" for="development">Development</label>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input class="custom-control-input" type="radio" id="financeAccounting" formControlName="category"
+              [value]="courseCategoryEnum.FinanceAccounting" name="category">
+            <label class="custom-control-label" for="financeAccounting">Finance & Accounting</label>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input class="custom-control-input" type="radio" id="ITSoftware" formControlName="category"
+              [value]="courseCategoryEnum.ITSoftware" name="category">
+            <label class="custom-control-label" for="ITSoftware">IT & Software</label>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input class="custom-control-input" type="radio" id="others" formControlName="category"
+              [value]="courseCategoryEnum.others" name="category">
+            <label class="custom-control-label" for="others">Others</label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!--End Filters-->
+    <div class="my-courses-wrapper" *ngIf="(myCourses$|async) as myCourses">
+      <h4 class="my-courses-title">My Courses</h4>
+    <div class="courses">
+      <perfect-scrollbar style="height: 250px;">
+      <div class="course d-flex align-items-center" *ngFor="let course$ of myCourses">
+        <ng-container *ngIf="(course$|async) as course">
+        <img class="course-image" [src]="course.CourseImg" alt="course image">
+        <label class="course-name">{{course.CourseName}}</label>
+      </ng-container>
+      </div>
+      </perfect-scrollbar>
+    </div>
+  </div>
+
+  </div>
+  <!--Start Courses-->
+  <div class="col-12 col-xl-9">
+    <div class="courses-cards-wrapper d-flex flex-grow-1 flex-column">
+      <div class="courses-header d-flex align-items-start justify-content-between">
+        <div class="courses-header-title">
+          <h5>All Courses</h5>
+        </div>
+        <div class="d-flex">
+          <button id="filterBtn" (click)="toggleFilters()"
+            class="d-flex align-items-center d-xl-none btn btn-outline-success text-white mr-3" data-toggle="tooltip"
+            data-placement="bottom" title="Filters">
+            <i class="fa fa-filter"></i>
+            <span class="d-none d-sm-flex d-xl-none ml-2">Filters</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="courses-cards row no-gutters">
+        <ng-container *ngFor="let listItem of componentList">
+          <div class="col-12 col-md-4">
+            <app-course [course]="listItem">
+              <ng-container availableSeats>
+                <div class="course-card-data-summary-point-text">
+                  <i class="fa fa-users"
+                    [ngClass]="{'green-color': listItem.AvailableSeats>4,'orange-color':listItem.AvailableSeats<=4}"></i>
+                  <span>{{listItem.AvailableSeats}}</span>
+                </div>
+              </ng-container>
+              <ng-container addBtn>
+                <div class="course-card-data-summary-points d-flex flex-column align-self-end">
+                  <button class="btn add-to-cart-btn d-flex align-items-center justify-content-center">Add
+                    to cart</button>
+                </div>
+              </ng-container>
+            </app-course>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <!--End Courses-->
+
+</div>
