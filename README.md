@@ -13,7 +13,10 @@ Run `npm start` for a dev server. Navigate to `http://localhost:4200/`. The app 
 
 - Use Angular CLI to generate your files.
 
-  
+
+## Notes
+
+- I used `MockDataInterceptor` to handle the HTTP requests and simulate the BE,  you will find it inside this path `src\app\core\interceptors` 
 
 ## To make code readable, maintainable and scalable
 
