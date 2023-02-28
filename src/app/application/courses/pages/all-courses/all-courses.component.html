@@ -58,19 +58,19 @@
 
     </div>
     <!--End Filters-->
-    <div class="my-courses-wrapper" *ngIf="myCourses$.length>0">
+    <div class="my-courses-wrapper" *ngIf="myCourses.length>0">
       <h4 class="my-courses-title">My Courses</h4>
-    <div class="courses">
-      <perfect-scrollbar style="height: 250px;">
-      <div class="course d-flex align-items-center" *ngFor="let course$ of myCourses$">
-        <ng-container *ngIf="(course$|async) as course">
-        <img class="course-image" [src]="course.CourseImg" alt="course image">
-        <label class="course-name">{{course.CourseName}}</label>
-      </ng-container>
+      <div class="courses">
+        <perfect-scrollbar style="height: 250px;">
+          <div class="course d-flex align-items-center" *ngFor="let course of myCourses">
+            <ng-container *ngIf="course">
+              <img class="course-image" [src]="course.CourseImg" alt="course image">
+              <label class="course-name">{{course.CourseName}}</label>
+            </ng-container>
+          </div>
+        </perfect-scrollbar>
       </div>
-      </perfect-scrollbar>
     </div>
-  </div>
 
   </div>
   <!--Start Courses-->
@@ -103,8 +103,8 @@
               </ng-container>
               <ng-container addBtn>
                 <div class="course-card-data-summary-points d-flex flex-column align-self-end">
-                  <!-- ||!((listItem.CourseId|isCourseAvaiable:myCourses$)|async) -->
-                  <button class="btn add-to-cart-btn d-flex align-items-center justify-content-center" [disabled]="!listItem.AvailableSeats" (click)="addToCart(listItem)">Add
+                  <button class="btn add-to-cart-btn d-flex align-items-center justify-content-center"
+                    [disabled]="!listItem.AvailableSeats || !(listItem.CourseId|isCourseAvaiable:myCourses)" (click)="addToCart(listItem)">Add
                     to cart</button>
                 </div>
               </ng-container>

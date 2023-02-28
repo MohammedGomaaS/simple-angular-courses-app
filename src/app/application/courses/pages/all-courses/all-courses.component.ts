@@ -15,7 +15,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class AllCoursesComponent implements OnInit, OnDestroy {
   public searchForm: FormGroup;
   public componentList: Course[] = [];
-  public myCourses$: Observable<Course>[] = [];
+  public myCourses: Course[] = [];
   private courses: Course[] = [];
   private subscriptions: Subscription[] = [];
   private searchSubscription: Subscription;
@@ -38,8 +38,8 @@ export class AllCoursesComponent implements OnInit, OnDestroy {
   }
 
   private setMyCourses():void{
-    this.coursesService.getStudentCourses(1234).pipe(take(1)).subscribe(courses$=>{
-      this.myCourses$ = courses$;
+    this.coursesService.getStudentCourses(1234).pipe(take(1)).subscribe(courses=>{
+      this.myCourses = courses;
     });
   }
 
@@ -123,7 +123,7 @@ export class AllCoursesComponent implements OnInit, OnDestroy {
 
   public addToCart(course: Course): void {
     this.coursesService.addCourse(course).pipe(take(1)).subscribe(res=>{
-      this.myCourses$.push(of(course))
+      this.myCourses.push(course);
     })
   }
 
